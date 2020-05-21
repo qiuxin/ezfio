@@ -1010,7 +1010,7 @@ def DefineTests():
                 '256', False, '', 'Sequential Preconditioning Pass 2',
                 lambda o: {SequentialConditioning()})
 
-    testname = "Sustained Multi-Threaded Sequential Read Tests by Block Size"
+    testname = "Sustained Single-Threaded Sequential Read Tests by Block Size"
     seqrand = "Seq"
     wmix = 0
     threads = 1
