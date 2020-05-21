@@ -929,7 +929,8 @@ def DefineTests():
     """Generate the work list for the main worker into OC."""
     global oc, quickie, fastPrecond
     # What we're shmoo-ing across
-    bslist = (512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072)
+    # Robert add 2020-05-21: 512Bytes, 1K , 2K , 4K , 8K , 16K , 32K , 64K , 128K , 256K, 512K, 1M
+    bslist = (512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576)
     qdlist = (1, 2, 4, 8, 16, 32, 64, 128, 256)
     threadslist = (1, 2, 4, 8, 16, 32, 64, 128, 256)
 
@@ -1002,31 +1003,47 @@ def DefineTests():
 
     AddTest('Sequential Preconditioning', 'Preparation', '', '', '', '', '',
             '', '', lambda o: {})  # Only for display on-screen
-    AddTest('Sequential Preconditioning', 'Seq Pass 1', '100', '131072', '1',
-            '256', False, '', 'Sequential Preconditioning Pass 1',
-            lambda o: {SequentialConditioning()})
-    if not fastPrecond:
-        AddTest('Sequential Preconditioning', 'Seq Pass 2', '100', '131072', '1',
-                '256', False, '', 'Sequential Preconditioning Pass 2',
-                lambda o: {SequentialConditioning()})
+    
+    #robertqiu 20200521 delete precondition , in order to save time
+    #AddTest('Sequential Preconditioning', 'Seq Pass 1', '100', '131072', '1',
+    #        '256', False, '', 'Sequential Preconditioning Pass 1',
+    #        lambda o: {SequentialConditioning()})
+    #if not fastPrecond:
+    #    AddTest('Sequential Preconditioning', 'Seq Pass 2', '100', '131072', '1',
+    #            '256', False, '', 'Sequential Preconditioning Pass 2',
+    #            lambda o: {SequentialConditioning()})
 
-    testname = "Sustained Single-Threaded Sequential Read Tests by Block Size"
+    testname = "Sustained Single-Threaded Sequential Read Tests with Queue Depth = 128 by Block Size"
     seqrand = "Seq"
     wmix = 0
     threads = 1
     runtime = shorttime
     iops_log = False
-    iodepth = 256
+    #robert add 20200521
+    #iodepth = 256
+    iodepth = 128
     AddTestBSShmoo()
 
-    testname = "Sustained Multi-Threaded Random Read Tests by Block Size"
-    seqrand = "Rand"
-    wmix = 0
-    threads = 16
+    #robert add 20200521
+    testname = "Sustained Single-Threaded Sequential Write Tests with Queue Depth = 128 by Block Size"
+    seqrand = "Seq"
+    wmix = 100
+    threads = 1
     runtime = shorttime
     iops_log = False
-    iodepth = 16
+    #robert add 20200521
+    #iodepth = 256
+    iodepth = 128
     AddTestBSShmoo()
+
+    #testname = "Sustained Multi-Threaded Random Read Tests by Block Size"
+    #seqrand = "Rand"
+    #wmix = 0
+    #threads = 16
+    #runtime = shorttime
+    #iops_log = False
+    #iodepth = 16
+    #AddTestBSShmoo()
 
     testname = "Sequential Write Tests with Queue Depth=1 by Block Size"
     seqrand = "Seq"
